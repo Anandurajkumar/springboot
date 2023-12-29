@@ -5,10 +5,11 @@
 replicaCount: 1
 
 image:
-  repository: myacrrepo1993.azurecr.io/osomudeya/springboot-docker
+  # repository: myacrrepo1993.azurecr.io/osomudeya/springboot-docker
+  repository: anandurajkumar/springbootapp
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "v1"
 
 imagePullSecrets: []
 nameOverride: ""
