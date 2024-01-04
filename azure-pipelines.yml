@@ -9,7 +9,7 @@ steps:
   inputs:
     containerRegistry: 'bootstrapapp'
     command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
+    Dockerfile: '**/Dockerfile'
 - task: HelmDeploy@0
   inputs:
     connectionType: 'Kubernetes Service Connection'
