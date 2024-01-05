@@ -1,28 +1,31 @@
-# Docker
-# Build and push an image to Azure Container Registry
+# Deploy to Azure Kubernetes Service
+# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- min
+- main
 
 resources:
 - repo: self
 
 variables:
+
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'bootstrapapp' ## Review Service Connections
-  imageRepository: 'bootstrapapp/anandurajkumarspringboot'
+  dockerRegistryServiceConnection: 'efd8f482-4e07-4b53-93b0-47b19cf104e4'
+  imageRepository: 'anandurajkumarspringboot'
   containerRegistry: 'bootstrapapp.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
+  imagePullSecret: 'bootstrapapp1064a200-auth'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
+
 stages:
 - stage: Build
-  displayName: Build and push stage
-  jobs:  
+  displayName: Build stage
+  jobs:
   - job: Build
     displayName: Build
     pool:
@@ -37,23 +40,40 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-- stage: deploy
-  displayName: deploy to aks
+
+    - upload: manifests
+      artifact: manifests
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+
   jobs:
-    - job: deploy
-      displayName: deploy
-      pool: 
-        vmImage: $(vmImageName)
-      steps:
-        - task: HelmDeploy@0
-          inputs:
-            connectionType: 'Azure Resource Manager'
-            azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
-            azureResourceGroup:  'bootstraper-rg'
-            kubernetesCluster: 'boot-aks'
-            namespace: 'default'
-            command: 'install'
-            chartType: 'FilePath'
-            chartPath: 'my-aks-charts'
-            releaseName: 'bootsrtap'
-  
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'Anandurajkumarspringboot-5994.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/service.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+
