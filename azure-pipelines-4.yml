@@ -69,9 +69,10 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
-              manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
-                $(Pipeline.Workspace)/manifests/service.yml
+              command: install
+              chartType: FilePath
+              chartName: 'my-aks-charts'
+              releaseName: 'bootsrtap'
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
