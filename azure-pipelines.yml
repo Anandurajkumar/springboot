@@ -52,7 +52,7 @@ stages:
             azureResourceGroup:  'bootstraper-rg'
             kubernetesCluster: 'boot-aks'
             namespace: 'default'
-            command: 'upgrade'
+            command: 'install'
             chartType: 'FilePath'
             chartPath: 'my-aks-charts'
             releaseName: 'bootsrtap'
