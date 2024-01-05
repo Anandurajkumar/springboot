@@ -69,7 +69,10 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
-              command: install
-              chartType: FilePath
-              chartPath: 'my-aks-helm-charts'
-
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/service.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
