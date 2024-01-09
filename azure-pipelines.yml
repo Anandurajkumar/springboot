@@ -73,7 +73,7 @@ stages:
           - script: |
               # Replace this with the command you want to run
               echo "Running your command here"
-              ls
+              ls -la
               pwd
 
           - task: HelmInstaller@1
