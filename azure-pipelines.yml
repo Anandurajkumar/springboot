@@ -76,10 +76,10 @@ stages:
         
       displayName: 'Run Your Command'
 
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-#   jobs:
+# - stage: Deploy
+#   displayName: Deploy stage
+#   dependsOn: Build
+# #   jobs:
 #   - deployment: Deploy
 #     displayName: Deploy
 #     pool:
@@ -114,18 +114,13 @@ stages:
 #                 image.tag=$(tag)
 #                 image.pullSecret=$(imagePullSecret)
 
-  - job: RunCommand
-    displayName: deploy
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - script: |
-        # Replace this with the command you want to run
-        echo "Running your command here"
-        ls
-        pwd
-        
-      displayName: 'Run Your Command'
+
+stages:
+- stage: deploy
+  displayName: deploy stage
+  jobs:
+  - job: deploy
+    displayName: Build
     - task: HelmInstaller@1
       displayName: Build and push an image to container registry
       inputs:
@@ -146,4 +141,3 @@ stages:
           image.repository=$(containerRegistry)/$(imageRepository)
           image.tag=$(tag)
           image.pullSecret=$(imagePullSecret)
-  - job: RunCommand
