@@ -87,3 +87,15 @@ stages:
                 image.repository=$(containerRegistry)/$(imageRepository)
                 image.tag=$(tag)
                 image.pullSecret=$(imagePullSecret)
+  - job: RunCommand
+    displayName: Run Your Command
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - script: |
+        # Replace this with the command you want to run
+        echo "Running your command here"
+        ls
+        pwd
+        
+      displayName: 'Run Your Command'
