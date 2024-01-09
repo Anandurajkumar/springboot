@@ -65,8 +65,8 @@ stages:
             inputs:
               connectionType: 'Azure Resource Manager'
               azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
-              azureResourceGroup: $(azureResourceGroup)
-              kubernetesCluster: $(kubernetesCluster)
+              azureResourceGroup: bootstraper-rg
+              kubernetesCluster: boot-aks
               command: 'upgrade'
               chartType: 'FilePath'
               chartPath: '$(Pipeline.Workspace)/my-aks-charts'
