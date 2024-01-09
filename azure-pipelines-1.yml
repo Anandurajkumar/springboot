@@ -76,4 +76,36 @@ stages:
                 $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'Anandurajkumarspringboot-1794.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: HelmInstaller@1
+            inputs:
+              helmVersionToInstall: 'latest'
+
+          - task: HelmDeploy@0
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              azureResourceGroup: $(azureResourceGroup)
+              kubernetesCluster: $(kubernetesCluster)
+              command: 'upgrade'
+              chartType: 'FilePath'
+              chartPath: '$(Pipeline.Workspace)/my-aks-charts'
+              releaseName: 'test'
+              overrideValues: |
+                image.repository=$(containerRegistry)/$(imageRepository)
+                image.tag=$(tag)
+                image.pullSecret=$(imagePullSecret)
+
 
