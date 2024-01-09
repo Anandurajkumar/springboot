@@ -41,8 +41,8 @@ stages:
         tags: |
           $(tag)
 
-    - upload: manifests
-      artifact: manifests
+    - upload: my-aks-charts
+      artifact: my-aks-charts
 
   - job: RunCommand
     displayName: Run Your Command
