@@ -65,18 +65,16 @@ stages:
     pool:
       vmImage: $(vmImageName)
     environment: 'Anandurajkumarspringboot-5994.default'
-    steps:
-    - script: |
-        # Replace this with the command you want to run
-        echo "Running your command here"
-        ls
-        pwd
-        
-      displayName: 'Run Your Command'
     strategy:
       runOnce:
         deploy:
           steps:
+          - script: |
+		          # Replace this with the command you want to run
+        	    echo "Running your command here"
+        	    ls
+        	    pwd
+
           - task: HelmInstaller@1
             inputs:
               helmVersionToInstall: 'latest'
