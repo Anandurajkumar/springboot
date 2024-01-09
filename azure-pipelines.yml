@@ -43,6 +43,17 @@ stages:
 
     - upload: manifests
       artifact: manifests
+  - job: RunCommand
+    displayName: Run Your Command
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - script: |
+        # Replace this with the command you want to run
+        echo "Running your command here"
+        ls
+        pwd
+      displayName: 'Run Your Command'
 
 - stage: Deploy
   displayName: Deploy stage
