@@ -143,7 +143,7 @@ stages:
           image.repository=$(containerRegistry)/$(imageRepository)
           image.tag=$(tag)
           image.pullSecret=$(imagePullSecret)
-    steps:
+  
     - script: |
         # Replace this with the command you want to run
         echo "Running your command here"
