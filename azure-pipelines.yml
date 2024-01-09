@@ -69,7 +69,7 @@ stages:
               kubernetesCluster: boot-aks
               command: 'upgrade'
               chartType: 'FilePath'
-              chartPath: '$(Pipeline.Workspace)/my-aks-charts'
+              chartPath: 'my-aks-charts'
               releaseName: 'test'
               overrideValues: |
                 image.repository=$(containerRegistry)/$(imageRepository)
