@@ -53,6 +53,7 @@ stages:
         echo "Running your command here"
         ls
         pwd
+        
       displayName: 'Run Your Command'
 
 - stage: Deploy
@@ -80,7 +81,7 @@ stages:
               kubernetesCluster: boot-aks
               command: 'upgrade'
               chartType: 'FilePath'
-              chartPath: '/home/vsts/work/1/s/my-aks-charts'
+              chartPath: 'my-aks-charts'
               releaseName: 'test'
               overrideValues: |
                 image.repository=$(containerRegistry)/$(imageRepository)
