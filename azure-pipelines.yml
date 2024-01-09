@@ -43,7 +43,26 @@ stages:
 
     - upload: my-aks-charts
       artifact: my-aks-charts
+    - task: HelmInstaller@1
+      displayName: Build and push an image to container registry
+      inputs:
+        helmVersionToInstall: 'latest'
 
+    - task:  HelmDeploy@0
+      displayName: Build and push an image to container registry
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
+        azureResourceGroup: bootstraper-rg
+        kubernetesCluster: boot-aks
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: 'my-aks-charts'
+        releaseName: 'test'
+        overrideValues: |
+          image.repository=$(containerRegistry)/$(imageRepository)
+          image.tag=$(tag)
+          image.pullSecret=$(imagePullSecret)
   - job: RunCommand
     displayName: Run Your Command
     pool:
@@ -57,53 +76,53 @@ stages:
         
       displayName: 'Run Your Command'
 
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    pool:
-      vmImage: $(vmImageName)
-    environment: 'Anandurajkumarspringboot-5994.default'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - script: |
-              # Replace this with the command you want to run
-              echo "Running your command here"
-              ls -la
-              pwd
+# - stage: Deploy
+#   displayName: Deploy stage
+#   dependsOn: Build
+#   jobs:
+#   - deployment: Deploy
+#     displayName: Deploy
+#     pool:
+#       vmImage: $(vmImageName)
+#     environment: 'Anandurajkumarspringboot-5994.default'
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - script: |
+#               # Replace this with the command you want to run
+#               echo "Running your command here"
+#               ls -la
+#               pwd
 
-          - task: HelmInstaller@1
-            inputs:
-              helmVersionToInstall: 'latest'
+#           - task: HelmInstaller@1
+#             inputs:
+#               helmVersionToInstall: 'latest'
 
-          - task: HelmDeploy@0
-            inputs:
-              connectionType: 'Azure Resource Manager'
-              azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
-              azureResourceGroup: bootstraper-rg
-              kubernetesCluster: boot-aks
-              command: 'upgrade'
-              chartType: 'FilePath'
-              chartPath: 'my-aks-charts'
-              releaseName: 'test'
-              overrideValues: |
-                image.repository=$(containerRegistry)/$(imageRepository)
-                image.tag=$(tag)
-                image.pullSecret=$(imagePullSecret)
+#           - task: HelmDeploy@0
+#             inputs:
+#               connectionType: 'Azure Resource Manager'
+#               azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
+#               azureResourceGroup: bootstraper-rg
+#               kubernetesCluster: boot-aks
+#               command: 'upgrade'
+#               chartType: 'FilePath'
+#               chartPath: 'my-aks-charts'
+#               releaseName: 'test'
+#               overrideValues: |
+#                 image.repository=$(containerRegistry)/$(imageRepository)
+#                 image.tag=$(tag)
+#                 image.pullSecret=$(imagePullSecret)
 
-  - job: RunCommand
-    displayName: Run Your Command
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - script: |
-        # Replace this with the command you want to run
-        echo "Running your command here"
-        ls
-        pwd
+#   - job: RunCommand
+#     displayName: Run Your Command
+#     pool:
+#       vmImage: $(vmImageName)
+#     steps:
+#     - script: |
+#         # Replace this with the command you want to run
+#         echo "Running your command here"
+#         ls
+#         pwd
         
-      displayName: 'Run Your Command'
+#       displayName: 'Run Your Command'
