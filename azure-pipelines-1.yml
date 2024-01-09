@@ -76,7 +76,7 @@ stages:
                 $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
-- stage: Deploy
+- stage: Deploy-helm
   displayName: Deploy stage
   dependsOn: Build
   jobs:
