@@ -75,8 +75,7 @@ stages:
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
-                $(containerRegistry)/$(imageRepository):$(tag)
-- stage: Deployhelm
+- stage: Deploytest
   displayName: Deploy stage
   dependsOn: Build
   jobs:
@@ -84,7 +83,7 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'Anandurajkumarspringboot-1794.default'
+    environment: 'Anandurajkumarspringboot-5994.default'
     strategy:
       runOnce:
         deploy:
@@ -96,7 +95,7 @@ stages:
           - task: HelmDeploy@0
             inputs:
               connectionType: 'Azure Resource Manager'
-              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
               azureResourceGroup: $(azureResourceGroup)
               kubernetesCluster: $(kubernetesCluster)
               command: 'upgrade'
