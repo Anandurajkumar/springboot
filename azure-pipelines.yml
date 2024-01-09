@@ -16,7 +16,7 @@ variables:
   containerRegistry: 'bootstrapapp.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
-  imagePullSecret: 'bootstrapapp1064a200-auth'
+  imagePullSecret: 'bootstrapapp97752035-auth'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
