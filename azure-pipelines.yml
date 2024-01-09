@@ -124,12 +124,12 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: HelmInstaller@1
-      displayName: Build and push an image to container registry
+      displayName: install helm
       inputs:
         helmVersionToInstall: 'latest'
 
     - task:  HelmDeploy@0
-      displayName: Build and push an image to container registry
+      displayName: deploy helm chart
       inputs:
         connectionType: 'Azure Resource Manager'
         azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
