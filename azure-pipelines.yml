@@ -135,8 +135,8 @@ stages:
         azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
         azureResourceGroup: bootstraper-rg
         kubernetesCluster: boot-aks
-        # command: 'upgrade'
-        # chartType: 'FilePath'
+        command: 'upgrade'
+        chartType: 'FilePath'
         # chartPath: 'my-aks-charts'
         # releaseName: 'tester'
         overrideValues: |
@@ -144,9 +144,13 @@ stages:
           image.tag=$(tag)
           image.pullSecret=$(imagePullSecret)
   
+  - job: RunCommand
+    displayName: Run Your Command
+    pool:
+      vmImage: $(vmImageName)
+    steps:
     - script: |
         # Replace this with the command you want to run
         echo "Running your command here"
         helm ls
-        helm install spro ./my-aks-charts 
       
