@@ -41,28 +41,28 @@ stages:
         tags: |
           $(tag)
 
-    - upload: my-aks-charts
-      artifact: my-aks-charts
-    - task: HelmInstaller@1
-      displayName: Build and push an image to container registry
-      inputs:
-        helmVersionToInstall: 'latest'
+    # - upload: my-aks-charts
+    #   artifact: my-aks-charts
+    # - task: HelmInstaller@1
+    #   displayName: Build and push an image to container registry
+    #   inputs:
+    #     helmVersionToInstall: 'latest'
 
-    - task:  HelmDeploy@0
-      displayName: Build and push an image to container registry
-      inputs:
-        connectionType: 'Azure Resource Manager'
-        azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
-        azureResourceGroup: bootstraper-rg
-        kubernetesCluster: boot-aks
-        command: 'upgrade'
-        chartType: 'FilePath'
-        chartPath: 'my-aks-charts'
-        releaseName: 'test'
-        overrideValues: |
-          image.repository=$(containerRegistry)/$(imageRepository)
-          image.tag=$(tag)
-          image.pullSecret=$(imagePullSecret)
+    # - task:  HelmDeploy@0
+    #   displayName: Build and push an image to container registry
+    #   inputs:
+    #     connectionType: 'Azure Resource Manager'
+    #     azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
+    #     azureResourceGroup: bootstraper-rg
+    #     kubernetesCluster: boot-aks
+    #     command: 'upgrade'
+    #     chartType: 'FilePath'
+    #     chartPath: 'my-aks-charts'
+    #     releaseName: 'test'
+    #     overrideValues: |
+    #       image.repository=$(containerRegistry)/$(imageRepository)
+    #       image.tag=$(tag)
+    #       image.pullSecret=$(imagePullSecret)
   - job: RunCommand
     displayName: Run Your Command
     pool:
