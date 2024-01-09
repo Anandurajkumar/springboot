@@ -43,6 +43,7 @@ stages:
 
     - upload: manifests
       artifact: manifests
+
   - job: RunCommand
     displayName: Run Your Command
     pool:
@@ -70,10 +71,10 @@ stages:
         deploy:
           steps:
           - script: |
-		          # Replace this with the command you want to run
-        	    echo "Running your command here"
-        	    ls
-        	    pwd
+              # Replace this with the command you want to run
+              echo "Running your command here"
+              ls
+              pwd
 
           - task: HelmInstaller@1
             inputs:
@@ -93,6 +94,7 @@ stages:
                 image.repository=$(containerRegistry)/$(imageRepository)
                 image.tag=$(tag)
                 image.pullSecret=$(imagePullSecret)
+
   - job: RunCommand
     displayName: Run Your Command
     pool:
