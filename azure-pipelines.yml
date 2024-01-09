@@ -137,20 +137,20 @@ stages:
         kubernetesCluster: boot-aks
         command: 'upgrade'
         chartType: 'FilePath'
-        # chartPath: 'my-aks-charts'
-        # releaseName: 'tester'
+        chartPath: 'my-aks-charts'
+        releaseName: 'tester'
         overrideValues: |
           image.repository=$(containerRegistry)/$(imageRepository)
           image.tag=$(tag)
           image.pullSecret=$(imagePullSecret)
   
-  - job: RunCommand
-    displayName: Run Your Command
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - script: |
-        # Replace this with the command you want to run
-        echo "Running your command here"
-        helm ls
+  # - job: RunCommand
+  #   displayName: Run Your Command
+  #   pool:
+  #     vmImage: $(vmImageName)
+  #   steps:
+  #   - script: |
+  #       # Replace this with the command you want to run
+  #       echo "Running your command here"
+  #       helm ls
       
