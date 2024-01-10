@@ -122,6 +122,7 @@ stages:
     displayName: Build
     pool:
       vmImage: $(vmImageName)
+    timeoutInMinutes: 60
     steps:
     - task: HelmInstaller@1
       displayName: install helm
@@ -155,6 +156,7 @@ stages:
           image.repository=$(containerRegistry)/$(imageRepository)
           image.tag=$(tag)
           image.pullSecret=$(imagePullSecret)
+        timeoutInMinutes: 30
     # - script: |
     #       helm ls
   # # - job: RunCommand
