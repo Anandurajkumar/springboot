@@ -119,7 +119,7 @@ stages:
   displayName: deploy stage
   jobs:
   - job: deploy
-    displayName: Build
+    displayName: deploy
     pool:
       vmImage: $(vmImageName)
     timeoutInMinutes: 60
@@ -148,7 +148,7 @@ stages:
         azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
         azureResourceGroup: bootstraper-rg
         kubernetesCluster: boot-aks
-        command: 'upgrade'
+        command: 'upgrade --wait --timeout 600s'
         chartType: 'FilePath'
         chartPath: 'my-aks-charts'
         releaseName: 'bootstrapp-app'
