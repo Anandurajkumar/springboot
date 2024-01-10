@@ -149,7 +149,6 @@ stages:
         azureResourceGroup: bootstraper-rg
         kubernetesCluster: boot-aks
         command: 'upgrade'
-        command: '--timeout 600s'
         chartType: 'FilePath'
         chartPath: 'my-aks-charts'
         releaseName: 'bootstrapp-app'
