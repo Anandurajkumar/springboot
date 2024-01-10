@@ -128,23 +128,23 @@ stages:
       inputs:
         helmVersionToInstall: 'latest'
 
-    # - task:  HelmDeploy@0
-    #   displayName: deploy helm chart
-    #   inputs:
-    #     connectionType: 'Azure Resource Manager'
-    #     azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
-    #     azureResourceGroup: bootstraper-rg
-    #     kubernetesCluster: boot-aks
-    #     command: 'upgrade'
-    #     chartType: 'FilePath'
-    #     chartPath: 'my-aks-charts'
-    #     releaseName: 'tester'
-    #     overrideValues: |
-    #       image.repository=$(containerRegistry)/$(imageRepository)
-    #       image.tag=$(tag)
-    #       image.pullSecret=$(imagePullSecret)
-    #      - script: |
-    #           helm ls
+    - task:  HelmDeploy@0
+      displayName: deploy helm chart
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
+        azureResourceGroup: bootstraper-rg
+        kubernetesCluster: boot-aks
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: 'my-aks-charts'
+        releaseName: 'tester'
+        overrideValues: |
+          image.repository=$(containerRegistry)/$(imageRepository)
+          image.tag=$(tag)
+          image.pullSecret=$(imagePullSecret)
+    - script: |
+          helm ls
   # # - job: RunCommand
   # #   displayName: Run Your Command
   # #   pool:
@@ -154,34 +154,34 @@ stages:
   # #       # Replace this with the command you want to run
   # #       echo "Running your command here"
   # #       helm ls
-  - stage: deploy
-  displayName: deploy stage
-  jobs:
-  - job: deploy
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - task: HelmInstaller@1
-      displayName: install helm
-      inputs:
-        helmVersionToInstall: 'latest'
+  # - stage: deploy
+  # displayName: deploy stage
+  # jobs:
+  # - job: deploy
+  #   displayName: Build
+  #   pool:
+  #     vmImage: $(vmImageName)
+  #   steps:
+  #   - task: HelmInstaller@1
+  #     displayName: install helm
+  #     inputs:
+  #       helmVersionToInstall: 'latest'
 
-    - task: HelmDeploy@0
-      displayName: deploy helm chart
-      inputs:
-        connectionType: 'Azure Resource Manager'
-        azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
-        azureResourceGroup: 'bootstraper-rg' # Add single quotes around the resource group name
-        kubernetesCluster: 'boot-aks' # Add single quotes around the cluster name
-        command: 'upgrade'
-        chartType: 'FilePath'
-        chartPath: 'my-aks-charts'
-        releaseName: 'tester'
-        overrideValues: |
-          image.repository=$(containerRegistry)/$(imageRepository)
-          image.tag=$(tag)
-          image.pullSecret=$(imagePullSecret)
+  #   - task: HelmDeploy@0
+  #     displayName: deploy helm chart
+  #     inputs:
+  #       connectionType: 'Azure Resource Manager'
+  #       azureSubscription: 'Free Trial(75ec71dc-2d2f-4c3e-b30b-e09eaef127a0)'
+  #       azureResourceGroup: 'bootstraper-rg' # Add single quotes around the resource group name
+  #       kubernetesCluster: 'boot-aks' # Add single quotes around the cluster name
+  #       command: 'upgrade'
+  #       chartType: 'FilePath'
+  #       chartPath: 'my-aks-charts'
+  #       releaseName: 'tester'
+  #       overrideValues: |
+  #         image.repository=$(containerRegistry)/$(imageRepository)
+  #         image.tag=$(tag)
+  #         image.pullSecret=$(imagePullSecret)
 
-    - script: |
-        helm ls
+  #   - script: |
+  #       helm ls
