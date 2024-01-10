@@ -127,8 +127,8 @@ stages:
       displayName: install helm
       inputs:
         helmVersionToInstall: 'latest'
-    - script: |
-        helm ls
+    # - script: |
+    #     helm ls
     - task: Kubernetes@1
       inputs:
         connectionType: 'Azure Resource Manager'
