@@ -21,6 +21,7 @@ variables:
   azureResourceGroup: 'bootstraper-rg'
   kubernetesCluster: 'boot-aks'
   releaseName: 'bootstrapp-app'
+  helmchart: 'springboot-chart'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -84,7 +85,7 @@ stages:
         kubernetesCluster: $(kubernetesCluster)
         command: 'upgrade'
         chartType: 'FilePath'
-        chartPath: 'springboot-chart'
+        chartPath: $(helmchart)
         releaseName: $(releaseName)
         recreate: true
         waitForExecution: false'
