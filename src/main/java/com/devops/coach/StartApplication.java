@@ -12,7 +12,7 @@ public class StartApplication {
 
     @GetMapping("/")
     public String index(final Model model) {
-        model.addAttribute("title", "Hows");
+        model.addAttribute("title", "AZURE POC");
         model.addAttribute("msg", "Hello All..We are testing springboot deployment with Helm and Jenkins Pipeline!!!!");
         return "index";
     }
