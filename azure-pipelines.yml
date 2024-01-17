@@ -61,27 +61,27 @@ stages:
         
       displayName: 'Run Your Command'
 
-- stage: createnamespace
-  displayName: create namespace
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - task: AzureCLI@2
-      displayName: 'Create Namespace'
-      inputs:
-        azureSubscription: $(azureServiceConnection)
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          namespaceExists=$(kubectl get namespace $(namespace) --output jsonpath='{.metadata.name}' 2>/dev/null || echo '')
-          if [ -z "$namespaceExists" ]; then
-            kubectl create namespace $(namespace)
-          else
-            echo "Namespace $(namespace) already exists. Skipping creation."
-          fi
+# - stage: createnamespace
+#   displayName: create namespace
+#   jobs:
+#   - job: Build
+#     displayName: Build
+#     pool:
+#       vmImage: $(vmImageName)
+#     steps:
+#     - task: AzureCLI@2
+#       displayName: 'Create Namespace'
+#       inputs:
+#         azureSubscription: $(azureServiceConnection)
+#         scriptType: 'bash'
+#         scriptLocation: 'inlineScript'
+#         inlineScript: |
+#           namespaceExists=$(kubectl get namespace $(namespace) --output jsonpath='{.metadata.name}' 2>/dev/null || echo '')
+#           if [ -z "$namespaceExists" ]; then
+#             kubectl create namespace $(namespace)
+#           else
+#             echo "Namespace $(namespace) already exists. Skipping creation."
+#           fi
 
 
 
@@ -98,11 +98,13 @@ stages:
       displayName: install helm
       inputs:
         helmVersionToInstall: 'latest'
-    - task: AzureCLI@2
-      displayName: 'Create Namespace'
+    - task: Kubernetes@1
       inputs:
-        # 
-        azureSubscription: $(azureSubscription)
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'boot-aks-default'
+        command: 'create'
+        secretType: 'dockerRegistry'
+        containerRegistryType: 'Azure Container Registry'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
@@ -110,8 +112,7 @@ stages:
           if [ -z "$namespaceExists" ]; then
             kubectl create namespace $(namespace)
           else
-            echo "Namespace $(namespace) already exists. Skipping creation."
-          fi
+            echo "Name
       
     - task: HelmDeploy@0
       inputs:
@@ -130,4 +131,18 @@ stages:
              image.repository=$(containerRegistry)/$(imageRepository)
              image.tag=$(tag)
              image.pullSecret=$(imagePullSecret)
-
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'boot-aks-default'
+        command: 'create'
+        secretType: 'dockerRegistry'
+        containerRegistryType: 'Azure Container Registry'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          namespaceExists=$(kubectl get namespace $(namespace) --output jsonpath='{.metadata.name}' 2>/dev/null || echo '')
+          if [ -z "$namespaceExists" ]; then
+            kubectl create namespace $(namespace)
+          else
+            echo "Name
