@@ -61,7 +61,7 @@ stages:
         
       displayName: 'Run Your Command'
 
-- stage: create namespace
+- stage: createnamespace
   displayName: create namespace
   jobs:
   - job: Build
