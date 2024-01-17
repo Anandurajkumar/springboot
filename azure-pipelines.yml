@@ -23,7 +23,7 @@ variables:
   releaseName: 'bootstrapp-app'
   helmchart: 'springboot-chart'
   namespace: 'develop'
-  azureServiceConnection: 'bootaks-service-connection'
+  azureServiceConnection: 'boot-aks-service-connection'
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
