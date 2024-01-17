@@ -22,6 +22,7 @@ variables:
   kubernetesCluster: 'boot-aks'
   releaseName: 'bootstrapp-app'
   helmchart: 'springboot-chart'
+  namespace: 'develop'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -76,7 +77,20 @@ stages:
       displayName: install helm
       inputs:
         helmVersionToInstall: 'latest'
-
+    - task: AzureCLI@2
+      displayName: 'Create Namespace'
+      inputs:
+        # 
+        azureSubscription: 'boot-aks-default'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          namespaceExists=$(kubectl get namespace $(namespace) --output jsonpath='{.metadata.name}' 2>/dev/null || echo '')
+          if [ -z "$namespaceExists" ]; then
+            kubectl create namespace $(namespace)
+          else
+            echo "Namespace $(namespace) already exists. Skipping creation."
+          fi
     - task: HelmDeploy@0
       inputs:
         connectionType: 'Azure Resource Manager'
@@ -87,7 +101,7 @@ stages:
         chartType: 'FilePath'
         chartPath: $(helmchart)
         releaseName: $(releaseName)
-        namespace: development
+        namespace: $(namespace)
         recreate: true
         waitForExecution: false'
         overrideValues: |
