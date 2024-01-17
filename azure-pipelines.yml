@@ -81,7 +81,7 @@ stages:
       displayName: 'Create Namespace'
       inputs:
         # 
-        azureSubscription: 'boot-aks-default'
+        azureSubscription: 'bootaks-service-connection'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
