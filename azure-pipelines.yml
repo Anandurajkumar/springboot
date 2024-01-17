@@ -98,6 +98,16 @@ stages:
         azureSubscription: $(azureSubscription)
         azureResourceGroup: $(azureResourceGroup)
         kubernetesCluster: $(kubernetesCluster)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          namespaceExists=$(kubectl get namespace $(namespace) --output jsonpath='{.metadata.name}' 2>/dev/null || echo '')
+          if [ -z "$namespaceExists" ]; then
+            kubectl create namespace $(namespace)
+          else
+            echo "Namespace $(namespace) already exists. Skipping creation."
+          fi
+      
         command: 'upgrade'
         chartType: 'FilePath'
         chartPath: $(helmchart)
