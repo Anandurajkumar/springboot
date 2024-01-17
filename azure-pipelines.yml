@@ -81,7 +81,7 @@ stages:
       displayName: 'Create Namespace'
       inputs:
         # 
-        azureSubscription: 'bootaks-service-connection'
+        azureSubscription: $(azureSubscription)
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
@@ -91,6 +91,7 @@ stages:
           else
             echo "Namespace $(namespace) already exists. Skipping creation."
           fi
+      
     - task: HelmDeploy@0
       inputs:
         connectionType: 'Azure Resource Manager'
