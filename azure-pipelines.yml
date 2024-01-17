@@ -87,6 +87,7 @@ stages:
         chartType: 'FilePath'
         chartPath: $(helmchart)
         releaseName: $(releaseName)
+        namespace: development
         recreate: true
         waitForExecution: false'
         overrideValues: |
