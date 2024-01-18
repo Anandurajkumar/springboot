@@ -162,7 +162,7 @@ stages:
         azureSubscription: 'boot-aks-service-connection'
         azureResourceGroup: 'bootstraper-rg'
         kubernetesCluster: 'boot-aks'
-        namespace: 'development'
+        namespace: 'develop'
         command: 'upgrade'
         chartType: 'FilePath'
         chartPath: $(helmchart)
