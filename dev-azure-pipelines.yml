@@ -3,7 +3,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- develop
+- development
 
 resources:
 - repo: self
@@ -98,18 +98,18 @@ stages:
       displayName: install helm
       inputs:
         helmVersionToInstall: 'latest'
-    - task: Kubernetes@1
-      inputs:
-        connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'boot-aks-default'
-        command: 'apply'
-        useConfigurationFile: true
-        configurationType: 'inline'
-        inline: |
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: $(namespace)
+    # - task: Kubernetes@1
+    #   inputs:
+    #     connectionType: 'Kubernetes Service Connection'
+    #     kubernetesServiceEndpoint: 'boot-aks-default'
+    #     command: 'apply'
+    #     useConfigurationFile: true
+    #     configurationType: 'inline'
+    #     inline: |
+    #       apiVersion: v1
+    #       kind: Namespace
+    #       metadata:
+    #         name: $(namespace)
     - task: HelmDeploy@0
       inputs:
         connectionType: 'Azure Resource Manager'
