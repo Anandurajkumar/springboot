@@ -154,7 +154,7 @@ stages:
         chartPath: $(helmchart)
         releaseName: 'bootstrapp-app'
         valueFile: 'dev-value.yaml'
-        recreate: true
+        recreate: false
         waitForExecution: false
         overrideValues: |
              image.repository=$(containerRegistry)/$(imageRepository)
