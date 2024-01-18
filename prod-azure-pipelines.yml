@@ -3,7 +3,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- prod
+- production
 
 resources:
 - repo: self
@@ -22,7 +22,7 @@ variables:
   kubernetesCluster: 'boot-aks'
   releaseName: 'bootstrapp-app'
   helmchart: 'springboot-chart'
-  namespace: 'production'
+  namespace: 'prod'
   azureServiceConnection: 'boot-aks-service-connection'
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
