@@ -152,6 +152,8 @@ stages:
         echo "Running your command here"
         ls
         pwd
+        cd springboot-chart
+        ls
         
       displayName: 'Run Your Command'
     - task: HelmDeploy@0
