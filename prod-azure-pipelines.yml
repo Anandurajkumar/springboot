@@ -3,15 +3,13 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- prod
+- production
 
 resources:
 - repo: self
 
 variables:
-  # $(dockerRegistryServiceConnection: '9e1b8301-d8cb-4c0e-8520-8ba6abd4ec0f')
-  # Container registry service connection established during pipeline creation
-  # dockerRegistryServiceConnection: '$dockerRegistryServiceConnection'
+  dockerRegistryServiceConnection: '9e1b8301-d8cb-4c0e-8520-8ba6abd4ec0f'
   imageRepository: 'anandurajkumarspringboot'
   containerRegistry: 'bootstrapapp.azurecr.io'
   dockerfilePath: '**/Dockerfile'
@@ -22,7 +20,7 @@ variables:
   kubernetesCluster: 'boot-aks'
   releaseName: 'bootstrapp-app'
   helmchart: 'springboot-chart'
-  namespace: 'production'
+  namespace: 'prod'
   azureServiceConnection: 'boot-aks-service-connection'
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -98,36 +96,35 @@ stages:
       displayName: install helm
       inputs:
         helmVersionToInstall: 'latest'
-    - task: Kubernetes@1
-      inputs:
-        connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'boot-aks-default'
-        command: 'apply'
-        useConfigurationFile: true
-        configurationType: 'inline'
-        inline: |
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: $(namespace)
-    - task: HelmDeploy@0
-      inputs:
-        connectionType: 'Azure Resource Manager'
-        azureSubscription: $(azureSubscription)
-        azureResourceGroup: $(azureResourceGroup)
-        kubernetesCluster: $(kubernetesCluster)
-        command: 'upgrade'
-        chartType: 'FilePath'
-        chartPath: $(helmchart)
-        releaseName: $(releaseName)
-        namespace: $(namespace)
-        recreate: true
-        valueFile: 'prod-values.yaml'
-        waitForExecution: false'
-        overrideValues: |
-             image.repository=$(containerRegistry)/$(imageRepository)
-             image.tag=$(tag)
-             image.pullSecret=$(imagePullSecret)
+    # - task: Kubernetes@1
+    #   inputs:
+    #     connectionType: 'Kubernetes Service Connection'
+    #     kubernetesServiceEndpoint: 'boot-aks-default'
+    #     command: 'apply'
+    #     useConfigurationFile: true
+    #     configurationType: 'inline'
+    #     inline: |
+    #       apiVersion: v1
+    #       kind: Namespace
+    #       metadata:
+    #         name: $(namespace)
+    # - task: HelmDeploy@0
+    #   inputs:
+    #     connectionType: 'Azure Resource Manager'
+    #     azureSubscription: $(azureSubscription)
+    #     azureResourceGroup: $(azureResourceGroup)
+    #     kubernetesCluster: $(kubernetesCluster)
+    #     command: 'upgrade'
+    #     chartType: 'FilePath'
+    #     chartPath: $(helmchart)
+    #     releaseName: $(releaseName)
+    #     namespace: $(namespace)
+    #     recreate: true
+    #     waitForExecution: false'
+    #     overrideValues: |
+    #          image.repository=$(containerRegistry)/$(imageRepository)
+    #          image.tag=$(tag)
+    #          image.pullSecret=$(imagePullSecret)
     # - task: Kubernetes@1
     #   inputs:
     #     connectionType: 'Kubernetes Service Connection'
@@ -143,3 +140,35 @@ stages:
     #         kubectl create namespace $(namespace)
     #       else
     #         echo "Name
+  - job: RunCommand
+    displayName: Run Your Command
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - script: |
+        # Replace this with the command you want to run
+        echo "Running your command here"
+        ls
+        pwd
+        cd springboot-chart
+        ls
+        
+      displayName: 'Run Your Command'
+    - task: HelmDeploy@0
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: 'boot-aks-service-connection'
+        azureResourceGroup: 'bootstraper-rg'
+        kubernetesCluster: 'boot-aks'
+        namespace: 'develop'
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: $(helmchart)
+        releaseName: 'bootstrapp-app'
+        valueFile: 'prod-values.yaml'
+        recreate: false
+        waitForExecution: false
+        overrideValues: |
+             image.repository=$(containerRegistry)/$(imageRepository)
+             image.tag=$(tag)
+             image.pullSecret=$(imagePullSecret)
