@@ -82,7 +82,7 @@ stages:
         connectionType: 'Azure Resource Manager'
         azureSubscription: $(azureSubscription)
         azureResourceGroup: $(azureResourceGroup)
-        kubernetesCluster: $(kubernetesCluster)s
+        kubernetesCluster: $(kubernetesCluster)
         command: 'upgrade'
         chartType: 'FilePath'
         chartPath: $(helmchart)
