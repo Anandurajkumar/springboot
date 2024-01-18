@@ -153,7 +153,7 @@ stages:
         chartType: 'FilePath'
         chartPath: $(helmchart)
         releaseName: 'bootstrapp-app'
-        valueFile: 'dev-value.yaml'
+        valueFile: 'springboot-chart/dev-value.yaml'
         recreate: false
         waitForExecution: false
         overrideValues: |
