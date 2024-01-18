@@ -98,35 +98,35 @@ stages:
       displayName: install helm
       inputs:
         helmVersionToInstall: 'latest'
-    - task: Kubernetes@1
-      inputs:
-        connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'boot-aks-default'
-        command: 'apply'
-        useConfigurationFile: true
-        configurationType: 'inline'
-        inline: |
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: $(namespace)
-    - task: HelmDeploy@0
-      inputs:
-        connectionType: 'Azure Resource Manager'
-        azureSubscription: $(azureSubscription)
-        azureResourceGroup: $(azureResourceGroup)
-        kubernetesCluster: $(kubernetesCluster)
-        command: 'upgrade'
-        chartType: 'FilePath'
-        chartPath: $(helmchart)
-        releaseName: $(releaseName)
-        namespace: $(namespace)
-        recreate: true
-        waitForExecution: false'
-        overrideValues: |
-             image.repository=$(containerRegistry)/$(imageRepository)
-             image.tag=$(tag)
-             image.pullSecret=$(imagePullSecret)
+    # - task: Kubernetes@1
+    #   inputs:
+    #     connectionType: 'Kubernetes Service Connection'
+    #     kubernetesServiceEndpoint: 'boot-aks-default'
+    #     command: 'apply'
+    #     useConfigurationFile: true
+    #     configurationType: 'inline'
+    #     inline: |
+    #       apiVersion: v1
+    #       kind: Namespace
+    #       metadata:
+    #         name: $(namespace)
+    # - task: HelmDeploy@0
+    #   inputs:
+    #     connectionType: 'Azure Resource Manager'
+    #     azureSubscription: $(azureSubscription)
+    #     azureResourceGroup: $(azureResourceGroup)
+    #     kubernetesCluster: $(kubernetesCluster)
+    #     command: 'upgrade'
+    #     chartType: 'FilePath'
+    #     chartPath: $(helmchart)
+    #     releaseName: $(releaseName)
+    #     namespace: $(namespace)
+    #     recreate: true
+    #     waitForExecution: false'
+    #     overrideValues: |
+    #          image.repository=$(containerRegistry)/$(imageRepository)
+    #          image.tag=$(tag)
+    #          image.pullSecret=$(imagePullSecret)
     # - task: Kubernetes@1
     #   inputs:
     #     connectionType: 'Kubernetes Service Connection'
@@ -142,3 +142,21 @@ stages:
     #         kubectl create namespace $(namespace)
     #       else
     #         echo "Name
+    - task: HelmDeploy@0
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: 'boot-aks-service-connection'
+        azureResourceGroup: 'bootstraper-rg'
+        kubernetesCluster: 'boot-aks'
+        namespace: 'development'
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: $(helmchart)
+        releaseName: 'bootstrapp-app'
+        valueFile: 'dev-value.yaml'
+        recreate: true
+        waitForExecution: false
+        overrideValues: |
+             image.repository=$(containerRegistry)/$(imageRepository)
+             image.tag=$(tag)
+             image.pullSecret=$(imagePullSecret)
