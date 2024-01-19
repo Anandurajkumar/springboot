@@ -13,7 +13,8 @@ variables:
   # Container registry service connection established during pipeline creation
   # dockerRegistryServiceConnection: '$dockerRegistryServiceConnection'
   imageRepository: 'anandurajkumarspringboot'
-  containerRegistry: 'bootstrapapp.azurecr.io'
+  # containerRegistry: 'bootstrapapp.azurecr.io'
+  containerRegistry: 'bootacr.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'bootstrapapp97752035-auth'
